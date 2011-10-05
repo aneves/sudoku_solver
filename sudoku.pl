@@ -2,12 +2,31 @@
 :-use_module(library(clpfd)).
 
 solve(Board) :-
-    (restrict_board_size(Board) ; write('Invalid board size.')), nl,
-    !, restrict_contents(Board), write('all valid numbers'), nl,
-    !, restrict_lines(Board), write('all valid lines'), nl,
-    !, restrict_collumns(Board), write('all valid collumns'), nl,
-    !, restrict_blocks(Board), write('all valid blocks'), nl,
+    (restrict_board_size(Board); write('Invalid board size.'), nl),
+    !, (restrict_contents(Board); write('all valid numbers'), nl),
+    !, (restrict_lines(Board); write('all valid lines'), nl),
+    !, (restrict_collumns(Board); write('all valid collumns'), nl),
+    !, (restrict_blocks(Board); write('all valid blocks'), nl),
+    fill_lines(Board),
     show(Board).
+
+fill_lines([]).
+fill_lines([Line|R]) :-
+    fill_cells(Line),
+    fill_lines(R).
+
+fill_cells([]).
+fill_cells([Cell|R]) :-
+    (nonvar(Cell) ; between(1, 9, Cell)),
+    fill_cells(R).
+
+% between(Low, High, Value) :-
+%     Value = Low
+%     ; (
+%         Low < High,
+%         LowInc is Low + 1,
+%         between(LowInc, High, Value)
+%     ).
 
 show([]).
 show([Line|R]) :-
@@ -16,7 +35,10 @@ show([Line|R]) :-
 
 show_line([]) :- nl.
 show_line([Cell|R]) :-
-        write(Cell), write(' '),
+        (  nonvar(Cell), write(Cell)
+         ; write('_')
+        ),
+        write(' '),
         show_line(R).
 
 get_line(Index, Board, Line) :-
