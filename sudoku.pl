@@ -1,6 +1,6 @@
 
 solve(Board) :-
-    restrict_board_size(Board),
+    restrict_board_size(Board) ; (write('Invalid board size.'),nl),
     restrict_contents(Board),
     restrict_lines(Board),
     restrict_collumns(Board),
