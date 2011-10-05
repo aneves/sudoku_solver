@@ -2,11 +2,11 @@
 :-use_module(library(clpfd)).
 
 solve(Board) :-
-    (restrict_board_size(Board); write('Invalid board size.'), nl),
-    !, (restrict_contents(Board); write('all valid numbers'), nl),
-    !, (restrict_lines(Board); write('all valid lines'), nl),
-    !, (restrict_collumns(Board); write('all valid collumns'), nl),
-    !, (restrict_blocks(Board); write('all valid blocks'), nl),
+    (restrict_board_size(Board); write('invalid board size'), nl),
+    !, (restrict_contents(Board); write('invalid numbers'), nl),
+    !, (restrict_lines(Board); write('invalid lines'), nl),
+    !, (restrict_collumns(Board); write('invalid collumns'), nl),
+    !, (restrict_blocks(Board); write('invalid blocks'), nl),
     fill_lines(Board),
     show(Board).
 
