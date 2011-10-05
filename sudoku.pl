@@ -1,21 +1,24 @@
 
+:-use_module(library(clpfd)).
+
 solve(Board) :-
-    restrict_board_size(Board) ; (write('Invalid board size.'),nl),
+    (restrict_board_size(Board) ; write('Invalid board size.')),
+    !,
     restrict_contents(Board),
     restrict_lines(Board),
-    restrict_collumns(Board),
-    restrict_blocks(Board),
+    %restrict_collumns(Board),
+    %restrict_blocks(Board),
     show(Board).
 
 show([]).
 show([Line|R]) :-
-        show_Line(Line),
+        show_line(Line),
         show(R).
 
-show_Line([]) :- nl.
-show_Line([Cell|R]) :-
+show_line([]) :- nl.
+show_line([Cell|R]) :-
         write(Cell), write(' '),
-        show_Line(R).
+        show_line(R).
 
 get_line(Index, Board, Line) :-
     get_item(Index, Board, Line).
@@ -62,8 +65,8 @@ restrict_contents([Line|R]) :-
         restrict_contents(R).
 restrict_contents_Line([]).
 restrict_contents_Line([Cell|R]) :-
-         Cell > 0,
-         Cell < 10,
+         Cell #> 0,
+         Cell #< 10,
         restrict_contents_Line(R).
 
 restrict_lines([]).
@@ -81,6 +84,7 @@ restrict_collumns(Col, Board) :-
 
 restrict_col(Col, Board) :-
     restrict_col(Col, Board, []).
+restrict_col(_, [], _).
 restrict_col(Col, [Line|R], Forbidden) :-
     get_cell(Col, Line, Cell),
     not_in(Cell, Forbidden),
@@ -129,13 +133,17 @@ valid_board_with_holes( [
 [9,1,2,3,4,5,6,7,8]
             ] ).
 
-test_rules :-
+trules :-
     valid_board(Board),
     solve(Board).
 
-test_solving :-
+tsolving :-
     valid_board_with_holes(Board),
     solve(Board).
 
+trestrict_columns :-
+    valid_board(Board),
+    restrict_collumns(Board).
+
 test :-
-    test_rules.
+    trules.
