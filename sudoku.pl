@@ -17,6 +17,24 @@ show_Line([Cell|R]) :-
         write(Cell), write(' '),
         show_Line(R).
 
+get_line(Index, Board, Line) :-
+    get_item(Index, Board, Line).
+get_cell(Index, Line, Cell) :-
+    get_item(Index, Line, Cell).
+
+get_item(1, [Cell|_], Cell).
+get_item(X, [_|R], Cell) :-
+    X > 0,
+    XDec is X - 1,
+    get_item(XDec, R, Cell).
+
+% not_in(?Item, +Bag)
+% TODO: this predicate probably already exists.
+not_in(_,[]).
+not_in(Item, [Maybe|R]) :-
+    Item \= Maybe,
+    not_in(Item, R).
+
 restrict_board_size(Board) :-
     restrict_board_size(9, 9, Board).
 
@@ -38,7 +56,7 @@ restrict_contents([Line|R]) :-
         restrict_contents(R).
 restrict_contents_Line([]).
 restrict_contents_Line([Cell|R]) :-
-         Cell >0,
+         Cell > 0,
          Cell < 10,
         restrict_contents_Line(R).
 
@@ -57,7 +75,22 @@ restrict_cell(Cell,[Other|R]) :-
          Cell \= Other,
         restrict_cell(Cell,R).
 
-restrict_collumns(_).
+restrict_collumns(Board) :-
+    restrict_collumns(9, Board).
+restrict_collumns(0, _).
+restrict_collumns(Col, Board) :-
+    restrict_col(Col, Board),
+    PrevCol is Col - 1,
+    restrict_collumns(PrevCol, Board).
+
+restrict_col(Col, Board) :-
+    restrict_col(Col, Board, []).
+restrict_col(Col, [Line|R], Forbidden) :-
+    get_cell(Col, Line, Cell),
+    not_in(Cell, Forbidden),
+    restrict_col(Col, R, [Cell|Forbidden]).
+
+
 restrict_blocks(_).
 
 %%%%% TESTING %%%%%
