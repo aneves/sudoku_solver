@@ -1,0 +1,18 @@
+# A Prolog solver of Sudoku puzzles
+Let's derust!
+
+# Installing
+Download the Prolog editor/compiler at
+http://www.swi-prolog.org/
+
+Download the IDE at
+http://lakk.bildung.hessen.de/netzwerk/faecher/informatik/swiprolog/indexe.html
+
+#Running
+Consult `sudoku.pl`
+run `solve.`
+
+#Challenge
+Do not look at
+http://en.wikipedia.org/wiki/Sudoku_algorithms#Example_of_a_Sudoku_solver_.28in_Prolog.29
+untill the program is working.
