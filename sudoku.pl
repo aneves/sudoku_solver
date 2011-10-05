@@ -6,8 +6,8 @@ solve(Board) :-
     !,
     restrict_contents(Board),
     restrict_lines(Board),
-    %restrict_collumns(Board),
-    %restrict_blocks(Board),
+    restrict_collumns(Board),
+    restrict_blocks(Board),
     show(Board).
 
 show([]).
@@ -35,7 +35,7 @@ get_item(X, [_|R], Cell) :-
 % TODO: this predicate probably already exists.
 not_in(_, []).
 not_in(Item, [Maybe|R]) :-
-    Item \= Maybe,
+    Item #\= Maybe,
     not_in(Item, R).
 
 % TODO: this predicate probably already exists.
