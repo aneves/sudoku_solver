@@ -30,10 +30,16 @@ get_item(X, [_|R], Cell) :-
 
 % not_in(?Item, +Bag)
 % TODO: this predicate probably already exists.
-not_in(_,[]).
+not_in(_, []).
 not_in(Item, [Maybe|R]) :-
     Item \= Maybe,
     not_in(Item, R).
+
+% TODO: this predicate probably already exists.
+all_unique([]).
+all_unique([Item|R]) :-
+    not_in(Item, R),
+    all_unique(R).
 
 restrict_board_size(Board) :-
     restrict_board_size(9, 9, Board).
@@ -62,18 +68,8 @@ restrict_contents_Line([Cell|R]) :-
 
 restrict_lines([]).
 restrict_lines([Line|R]) :-
-        restrict_line(Line),
+        all_unique(Line),
         restrict_lines(R).
-
-restrict_line([]).
-restrict_line([Cell|R]) :-
-        restrict_cell(Cell,R),
-        restrict_line(R).
-
-restrict_cell(_,[]).
-restrict_cell(Cell,[Other|R]) :-
-         Cell \= Other,
-        restrict_cell(Cell,R).
 
 restrict_collumns(Board) :-
     restrict_collumns(9, Board).
@@ -90,8 +86,21 @@ restrict_col(Col, [Line|R], Forbidden) :-
     not_in(Cell, Forbidden),
     restrict_col(Col, R, [Cell|Forbidden]).
 
+restrict_blocks([]).
+restrict_blocks([Line1,Line2,Line3|R]) :-
+    restrict_block_lines(Line1, Line2, Line3),
+    restrict_blocks(R).
 
-restrict_blocks(_).
+restrict_block_lines([], [], []).
+restrict_block_lines(Line1, Line2, Line3) :-
+    Line1 = [C11, C12, C13|R1],
+    Line2 = [C21, C22, C23|R2],
+    Line3 = [C31, C32, C33|R3],
+    Block = [C11, C12, C13,
+             C21, C22, C23,
+             C31, C32, C33],
+    all_unique(Block),
+    restrict_block_lines(R1, R2, R3).
 
 %%%%% TESTING %%%%%
 
