@@ -2,12 +2,11 @@
 :-use_module(library(clpfd)).
 
 solve(Board) :-
-    (restrict_board_size(Board) ; write('Invalid board size.')),
-    !,
-    restrict_contents(Board),
-    restrict_lines(Board),
-    restrict_collumns(Board),
-    restrict_blocks(Board),
+    (restrict_board_size(Board) ; write('Invalid board size.')), nl,
+    !, restrict_contents(Board), write('all valid numbers'), nl,
+    !, restrict_lines(Board), write('all valid lines'), nl,
+    !, restrict_collumns(Board), write('all valid collumns'), nl,
+    !, restrict_blocks(Board), write('all valid blocks'), nl,
     show(Board).
 
 show([]).
@@ -108,7 +107,7 @@ restrict_block_lines(Line1, Line2, Line3) :-
 
 %%%%% TESTING %%%%%
 
- % valid_board( -Board ).
+
 valid_board( [
 [1,2,3,4,5,6,7,8,9],
 [4,5,6,7,8,9,1,2,3],
@@ -133,6 +132,30 @@ valid_board_with_holes( [
 [9,1,2,3,4,5,6,7,8]
             ] ).
 
+example( 'easy', [
+[_,6,_,_,5,2,4,3,_],
+[_,_,_,_,7,_,2,_,_],
+[1,_,_,_,8,_,7,6,_],
+[4,_,_,_,1,5,_,7,_],
+[5,8,7,_,_,_,1,4,6],
+[_,9,_,6,4,_,_,_,2],
+[_,5,8,_,9,_,_,_,1],
+[_,_,3,_,6,_,_,_,_],
+[_,1,4,3,2,_,_,5,_]
+            ] ).
+
+example( 'hard', [
+[_,_,_,_,_,_,6,7,_],
+[_,_,6,_,8,_,_,_,4],
+[9,5,_,_,4,_,_,3,_],
+[3,6,_,_,_,8,2,_,_],
+[_,_,_,_,_,_,_,_,_],
+[_,_,2,1,_,_,_,5,7],
+[_,2,_,_,3,_,_,9,8],
+[6,_,_,_,5,_,4,_,_],
+[_,4,8,_,_,_,_,_,_]
+            ] ).
+
 trules :-
     valid_board(Board),
     solve(Board).
@@ -147,3 +170,7 @@ trestrict_columns :-
 
 test :-
     trules.
+
+test( Difficulty ) :-
+    example(Difficulty, Board),
+    solve(Board).
