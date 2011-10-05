@@ -1,10 +1,11 @@
 
 solve(Board) :-
-        restrict_contents(Board),
-        restrict_lines(Board),
-        restrict_collumns(Board),
-        restrict_blocks(Board),
-        show(Board).
+    restrict_board_size(Board),
+    restrict_contents(Board),
+    restrict_lines(Board),
+    restrict_collumns(Board),
+    restrict_blocks(Board),
+    show(Board).
 
 show([]).
 show([Line|R]) :-
@@ -15,6 +16,21 @@ show_Line([]) :- nl.
 show_Line([Cell|R]) :-
         write(Cell), write(' '),
         show_Line(R).
+
+restrict_board_size(Board) :-
+    restrict_board_size(9, 9, Board).
+
+restrict_board_size(0, _, []).
+restrict_board_size(0, _, _) :- fail.
+restrict_board_size(Y, X, [Line|R]) :-
+    restrict_line_size(X, Line),
+    YDec is Y - 1,
+    restrict_board_size(YDec, X, R).
+restrict_line_size(0, []).
+restrict_line_size(0, _) :- fail.
+restrict_line_size(X, [_|R]) :-
+    XDec is X - 1,
+    restrict_line_size(XDec, R).
 
 restrict_contents([]).
 restrict_contents([Line|R]) :-
@@ -80,4 +96,4 @@ test_solving :-
     solve(Board).
 
 test :-
-    test_solving.
+    test_rules.
